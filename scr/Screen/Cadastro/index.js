@@ -23,10 +23,9 @@ export default function Login() {
   const showToast = false
 
 
-  async function insertUser() {
+  async function insertUser(id) {
     let usuarios = await firebase.database().ref('usuarios')
-    let chave = await usuarios.push().key;
-    usuarios.child(chave).set({
+    usuarios.child(id).set({
       name: name,
       email: email,
     })
@@ -37,7 +36,7 @@ export default function Login() {
       Keyboard.dismiss();
       await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((value) => {
-          insertUser()
+          insertUser(value.user.uid)
           Toast.show({
             text: 'Cadastro Realizado com sucesso',
             position: 'bottom',
